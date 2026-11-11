@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "ISBNLab", email = "hello@isbnlab.com" }]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = ["isbn", "isbn-13", "isbn-10", "books", "book-metadata", "isbn-lookup", "bisac", "api-client"]
 classifiers = [
   "Development Status :: 4 - Beta",

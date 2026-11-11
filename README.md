@@ -8,7 +8,7 @@ The official Python client for the [ISBNLab book metadata API](https://www.isbnl
 pip install isbnlab
 ```
 
-Python 3.9 or later.
+Python 3.10 or later.
 
 ## Get an API token
 
