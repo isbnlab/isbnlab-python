@@ -1,0 +1,17 @@
+# Hand-maintained; the generator must not overwrite these.
+README.md
+LICENSE
+pyproject.toml
+.gitignore
+.github/**
+tests/**
+# Generator files not used here.
+test/**
+.travis.yml
+.gitlab-ci.yml
+git_push.sh
+tox.ini
+setup.py
+setup.cfg
+requirements.txt
+test-requirements.txt

@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "isbnlab"
+version = "0.1.0"
+description = "Official Python client for the ISBNLab book metadata API: books by ISBN, authors, publishers, BISAC genres, covers and ISBN conversion."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "ISBNLab", email = "hello@isbnlab.com" }]
+requires-python = ">=3.9"
+keywords = ["isbn", "isbn-13", "isbn-10", "books", "book-metadata", "isbn-lookup", "bisac", "api-client"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Software Development :: Libraries",
+  "Typing :: Typed",
+]
+dependencies = [
+  "urllib3>=2.1.0,<3.0.0",
+  "python-dateutil>=2.8.2",
+  "pydantic>=2",
+  "typing-extensions>=4.7.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.urls]
+Homepage = "https://www.isbnlab.com/"
+Documentation = "https://www.isbnlab.com/api-information"
+Repository = "https://github.com/isbnlab/isbnlab-python"
+Issues = "https://github.com/isbnlab/isbnlab-python/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["isbnlab"]
+
+[tool.hatch.build.targets.sdist]
+include = ["isbnlab", "README.md", "LICENSE", "pyproject.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
