@@ -30,8 +30,7 @@ with isbnlab.ApiClient(config) as client:
     print(book.authors[0].name)     # Robert Jordan
     print(book.publish_date.year if book.publish_date else None)
 
-    for edition in book.other_editions or []:
-        print(edition.isbn13, edition.title)
+    print(book.other_editions_count, "other editions")
 ```
 
 Many fields are empty for some books, so every field can be `None`. Field names are snake_case (`book.number_of_pages`, `book.other_editions`); `book.to_dict()` gives the API's own camelCase names.
@@ -44,6 +43,32 @@ with isbnlab.ApiClient(config) as client:
     author = isbnlab.AuthorsApi(client).get_author(str(book.authors[0].id))
 
     print(author.bio)
+```
+
+## Fields that depend on your plan
+
+A book lookup lists the other editions (`other_editions`, `previous_edition`, `next_edition`) on the Pro plan. On the Free and Standard plans those fields are empty, `other_editions_count` still gives the number of other editions, and two response headers name what was left out: `X-Plan-Restricted-Fields` lists the fields and `X-Plan-Upgrade` links to the plans. `isbnlab.restricted_fields()` and `isbnlab.upgrade_url()` read them from a `..._with_http_info()` call:
+
+```python
+with isbnlab.ApiClient(config) as client:
+    books = isbnlab.BooksApi(client)
+    response = books.get_book_by_isbn_with_http_info("9780765302304")
+    book = response.data
+
+    if "otherEditions" in isbnlab.restricted_fields(response):
+        print(book.other_editions_count, "other editions; see", isbnlab.upgrade_url(response))
+    else:
+        for edition in book.other_editions or []:
+            print(edition.isbn13, edition.title)
+```
+
+`isbnlab.restricted_fields(response)` returns every field that was left out by its API name, for example `["otherEditions", "previousEdition", "nextEdition"]`, or `[]` when the response is complete.
+
+A cover lookup (Standard or Pro) gives each cover image's URL in `covers`, and in `sizes` the same image 200, 400 and 800 pixels wide (`w200`, `w400`, `w800`); a width is `None` when that size is not available.
+
+```python
+cover = books.get_book_cover_by_isbn("9780765302304")
+print(cover.sizes[0].w400)  # https://covers.isbnlab.com/w400/9780765302304.jpg
 ```
 
 ## Errors

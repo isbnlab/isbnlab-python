@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **isbn13** | **str** |  | [optional] 
 **covers** | **List[str]** |  | [optional] 
+**sizes** | [**List[CoverSize]**](CoverSize.md) |  | [optional] 
 
 ## Example
 

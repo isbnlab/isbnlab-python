@@ -7,6 +7,7 @@ docs/BookEditions.md
 docs/BooksApi.md
 docs/Category.md
 docs/Contributor.md
+docs/CoverSize.md
 docs/EditionRef.md
 docs/EntityRef.md
 docs/Genre.md
@@ -46,6 +47,7 @@ isbnlab/models/book_cover.py
 isbnlab/models/book_editions.py
 isbnlab/models/category.py
 isbnlab/models/contributor.py
+isbnlab/models/cover_size.py
 isbnlab/models/edition_ref.py
 isbnlab/models/entity_ref.py
 isbnlab/models/genre.py
@@ -61,5 +63,6 @@ isbnlab/models/series_book.py
 isbnlab/models/series_parent.py
 isbnlab/models/subject.py
 isbnlab/models/subject_ref.py
+isbnlab/plan.py
 isbnlab/py.typed
 isbnlab/rest.py

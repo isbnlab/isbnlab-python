@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 # Define package exports
 __all__ = [
@@ -34,6 +34,8 @@ __all__ = [
     "ApiKeyError",
     "ApiAttributeError",
     "ApiException",
+    "restricted_fields",
+    "upgrade_url",
     "Author",
     "AuthorPhoto",
     "Book",
@@ -41,6 +43,7 @@ __all__ = [
     "BookEditions",
     "Category",
     "Contributor",
+    "CoverSize",
     "EditionRef",
     "EntityRef",
     "Genre",
@@ -76,6 +79,8 @@ from isbnlab.exceptions import ApiValueError as ApiValueError
 from isbnlab.exceptions import ApiKeyError as ApiKeyError
 from isbnlab.exceptions import ApiAttributeError as ApiAttributeError
 from isbnlab.exceptions import ApiException as ApiException
+from isbnlab.plan import restricted_fields as restricted_fields
+from isbnlab.plan import upgrade_url as upgrade_url
 
 # import models into sdk package
 from isbnlab.models.author import Author as Author
@@ -85,6 +90,7 @@ from isbnlab.models.book_cover import BookCover as BookCover
 from isbnlab.models.book_editions import BookEditions as BookEditions
 from isbnlab.models.category import Category as Category
 from isbnlab.models.contributor import Contributor as Contributor
+from isbnlab.models.cover_size import CoverSize as CoverSize
 from isbnlab.models.edition_ref import EditionRef as EditionRef
 from isbnlab.models.entity_ref import EntityRef as EntityRef
 from isbnlab.models.genre import Genre as Genre

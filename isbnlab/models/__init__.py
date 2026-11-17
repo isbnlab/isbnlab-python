@@ -22,6 +22,7 @@ from isbnlab.models.book_cover import BookCover
 from isbnlab.models.book_editions import BookEditions
 from isbnlab.models.category import Category
 from isbnlab.models.contributor import Contributor
+from isbnlab.models.cover_size import CoverSize
 from isbnlab.models.edition_ref import EditionRef
 from isbnlab.models.entity_ref import EntityRef
 from isbnlab.models.genre import Genre

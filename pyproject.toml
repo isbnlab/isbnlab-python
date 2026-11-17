@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "isbnlab"
-version = "0.1.0"
+version = "0.2.0"
 description = "Official Python client for the ISBNLab book metadata API: books by ISBN, authors, publishers, BISAC genres, covers and ISBN conversion."
 readme = "README.md"
 license = "MIT"

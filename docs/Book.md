@@ -42,6 +42,7 @@ Name | Type | Description | Notes
 **languages_count** | **int** |  | [optional] 
 **link** | **str** |  | [optional] 
 **isbn_model** | [**IsbnDetails**](IsbnDetails.md) |  | [optional] 
+**other_editions_count** | **int** |  | [optional] [readonly] 
 
 ## Example
 

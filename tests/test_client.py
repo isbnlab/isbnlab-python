@@ -138,3 +138,57 @@ def test_errors_carry_status_and_detail(respond, status, exception, detail):
     assert raised.value.status == status
     assert detail in raised.value.body
     assert raised.value.headers["Retry-After"] == "60"
+
+
+def test_the_edition_count_comes_with_every_book(respond):
+    client, _ = respond("book.json")
+
+    book = BooksApi(client).get_book_by_isbn("9780765302304")
+
+    assert book.other_editions_count == len(book.other_editions)
+
+
+def test_a_plan_without_edition_links_gets_the_count_and_the_restriction_headers(respond):
+    # Lowercase, as they arrive over HTTP/2.
+    client, _ = respond("book-free.json", headers={
+        "x-plan-restricted-fields": "otherEditions, previousEdition, nextEdition",
+        "x-plan-upgrade": "https://www.isbnlab.com/pricing",
+    })
+
+    response = BooksApi(client).get_book_by_isbn_with_http_info("9780765302304")
+    book = response.data
+
+    assert book.other_editions is None
+    assert book.previous_edition is None
+    assert book.next_edition is None
+    assert book.other_editions_count == 2
+    assert isbnlab.restricted_fields(response) == ["otherEditions", "previousEdition", "nextEdition"]
+    assert isbnlab.restricted_fields(response.headers) == ["otherEditions", "previousEdition", "nextEdition"]
+    assert isbnlab.upgrade_url(response) == "https://www.isbnlab.com/pricing"
+
+
+def test_a_full_response_has_no_restricted_fields(respond):
+    client, _ = respond("book.json")
+
+    response = BooksApi(client).get_book_by_isbn_with_http_info("9780765302304")
+
+    assert isbnlab.restricted_fields(response) == []
+    assert isbnlab.upgrade_url(response) is None
+    assert isbnlab.restricted_fields({"X-Plan-Restricted-Fields": "nextEdition"}) == ["nextEdition"]
+    assert isbnlab.restricted_fields(None) == []
+
+
+def test_cover_sizes(respond):
+    client, _ = respond("book-cover.json")
+    cover = BooksApi(client).get_book_cover_by_isbn("9780765302304")
+
+    assert all(isinstance(s, isbnlab.CoverSize) for s in cover.sizes)
+    assert [s.url for s in cover.sizes] == cover.covers
+    assert cover.sizes[0].w200 == "https://covers.isbnlab.com/w200/9780765302304.jpg"
+    assert cover.sizes[1].w800 == "https://covers.isbnlab.com/w800/9780765302304-01.jpg"
+
+    client, _ = respond("book-cover-elsewhere.json")
+    elsewhere = BooksApi(client).get_book_cover_by_isbn("9780765302304")
+
+    assert elsewhere.sizes[1].url == "https://example.com/elsewhere.jpg"
+    assert (elsewhere.sizes[1].w200, elsewhere.sizes[1].w400, elsewhere.sizes[1].w800) == (None, None, None)

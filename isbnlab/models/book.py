@@ -74,7 +74,8 @@ class Book(BaseModel):
     languages_count: Optional[StrictInt] = Field(default=None, alias="languagesCount")
     link: Optional[StrictStr] = None
     isbn_model: Optional[IsbnDetails] = Field(default=None, alias="isbnModel")
-    __properties: ClassVar[List[str]] = ["id", "isbn10", "isbn13", "workId", "title", "subtitle", "numberOfPages", "description", "publishers", "imprint", "publishDate", "physicalFormat", "covers", "authors", "contributors", "subjects", "series", "genres", "otherEditions", "previousEdition", "nextEdition", "physicalDimensions", "ratings", "language", "saleStatus", "excerpt", "reviewQuotes", "retailLinks", "categories", "aiSummary", "canonicalEditionId", "languageCode", "publishDatePrecision", "estimatedReadTime", "languagesCount", "link", "isbnModel"]
+    other_editions_count: Optional[StrictInt] = Field(default=None, alias="otherEditionsCount")
+    __properties: ClassVar[List[str]] = ["id", "isbn10", "isbn13", "workId", "title", "subtitle", "numberOfPages", "description", "publishers", "imprint", "publishDate", "physicalFormat", "covers", "authors", "contributors", "subjects", "series", "genres", "otherEditions", "previousEdition", "nextEdition", "physicalDimensions", "ratings", "language", "saleStatus", "excerpt", "reviewQuotes", "retailLinks", "categories", "aiSummary", "canonicalEditionId", "languageCode", "publishDatePrecision", "estimatedReadTime", "languagesCount", "link", "isbnModel", "otherEditionsCount"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -107,9 +108,11 @@ class Book(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
         """
         excluded_fields: Set[str] = set([
             "id",
+            "other_editions_count",
         ])
 
         _dict = self.model_dump(
@@ -380,6 +383,11 @@ class Book(BaseModel):
         if self.isbn_model is None and "isbn_model" in self.model_fields_set:
             _dict['isbnModel'] = None
 
+        # set to None if other_editions_count (nullable) is None
+        # and model_fields_set contains the field
+        if self.other_editions_count is None and "other_editions_count" in self.model_fields_set:
+            _dict['otherEditionsCount'] = None
+
         return _dict
 
     @classmethod
@@ -428,7 +436,8 @@ class Book(BaseModel):
             "estimatedReadTime": obj.get("estimatedReadTime"),
             "languagesCount": obj.get("languagesCount"),
             "link": obj.get("link"),
-            "isbnModel": IsbnDetails.from_dict(obj["isbnModel"]) if obj.get("isbnModel") is not None else None
+            "isbnModel": IsbnDetails.from_dict(obj["isbnModel"]) if obj.get("isbnModel") is not None else None,
+            "otherEditionsCount": obj.get("otherEditionsCount")
         })
         return _obj
 

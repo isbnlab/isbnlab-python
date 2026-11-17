@@ -20,6 +20,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from isbnlab.models.cover_size import CoverSize
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -29,7 +30,8 @@ class BookCover(BaseModel):
     """ # noqa: E501
     isbn13: Optional[StrictStr] = None
     covers: Optional[List[StrictStr]] = None
-    __properties: ClassVar[List[str]] = ["isbn13", "covers"]
+    sizes: Optional[List[CoverSize]] = None
+    __properties: ClassVar[List[str]] = ["isbn13", "covers", "sizes"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -70,6 +72,13 @@ class BookCover(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in sizes (list)
+        _items = []
+        if self.sizes:
+            for _item_sizes in self.sizes:
+                if _item_sizes:
+                    _items.append(_item_sizes.to_dict())
+            _dict['sizes'] = _items
         # set to None if isbn13 (nullable) is None
         # and model_fields_set contains the field
         if self.isbn13 is None and "isbn13" in self.model_fields_set:
@@ -79,6 +88,11 @@ class BookCover(BaseModel):
         # and model_fields_set contains the field
         if self.covers is None and "covers" in self.model_fields_set:
             _dict['covers'] = None
+
+        # set to None if sizes (nullable) is None
+        # and model_fields_set contains the field
+        if self.sizes is None and "sizes" in self.model_fields_set:
+            _dict['sizes'] = None
 
         return _dict
 
@@ -93,7 +107,8 @@ class BookCover(BaseModel):
 
         _obj = cls.model_validate({
             "isbn13": obj.get("isbn13"),
-            "covers": obj.get("covers")
+            "covers": obj.get("covers"),
+            "sizes": [CoverSize.from_dict(_item) for _item in obj["sizes"]] if obj.get("sizes") is not None else None
         })
         return _obj
 
